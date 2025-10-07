@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: verification-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: verification
+  template:
+    metadata:
+      labels:
+        app: verification
+    spec:
+      containers:
+        - name: verification
+          image: <YOUR_DOCKERHUB_USERNAME>/verification-service:latest
+          env:
+            - name: PORT
+              value: "3002"
+            - name: DATA_DIR
+              value: "/data"
+          ports:
+            - containerPort: 3002
+          volumeMounts:
+            - name: verification-data
+              mountPath: /data
+      volumes:
+        - name: verification-data
+          persistentVolumeClaim:
+            claimName: verification-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: verification-service
+spec:
+  selector:
+    app: verification
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3002
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: verification-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
