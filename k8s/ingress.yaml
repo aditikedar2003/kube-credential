@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kube-credential-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: kube-credential.local
+      http:
+        paths:
+          - path: /issuance
+            pathType: Prefix
+            backend:
+              service:
+                name: issuance-service
+                port:
+                  number: 80
+          - path: /verification
+            pathType: Prefix
+            backend:
+              service:
+                name: verification-service
+                port:
+                  number: 80
