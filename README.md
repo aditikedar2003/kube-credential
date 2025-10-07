@@ -2,9 +2,9 @@
 
 **Assignment**: Kube Credential  
 **Role**: Full Stack Engineer  
-**Author**: Aditi  
-**Email**: your.email@example.com  
-**Phone**: +91-XXXXXXXXXX
+**Author**: Aditi Ramchandra Kedar
+**Email**: kedar.aditi07@gmail.com 
+**Phone**: +91-8999388453
 
 ## Overview
 Two microservices (Issuance & Verification) in Node.js (TypeScript) + SQLite. React frontend with Issue & Verify pages. Kubernetes manifests included.
@@ -16,3 +16,4 @@ Two microservices (Issuance & Verification) in Node.js (TypeScript) + SQLite. Re
    npm install
    npm run dev
    # http://localhost:3001
+
