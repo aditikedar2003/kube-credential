@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: issuance-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: issuance
+  template:
+    metadata:
+      labels:
+        app: issuance
+    spec:
+      containers:
+        - name: issuance
+          image: <YOUR_DOCKERHUB_USERNAME>/issuance-service:latest
+          env:
+            - name: PORT
+              value: "3001"
+            - name: DATA_DIR
+              value: "/data"
+          ports:
+            - containerPort: 3001
+          volumeMounts:
+            - name: issuance-data
+              mountPath: /data
+      volumes:
+        - name: issuance-data
+          persistentVolumeClaim:
+            claimName: issuance-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: issuance-service
+spec:
+  selector:
+    app: issuance
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3001
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: issuance-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
